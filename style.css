@@ -22,6 +22,7 @@
 .landing-section {
     background-color: #000000;
     color: #ffffff;
+    font-size: 3rem;
 }
 
 .about-section {
@@ -60,4 +61,25 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
+}
+
+.typed-text {
+    font-weight: 600;
+    color: #2196f3; /* Or any color you prefer */
+}
+
+.cursor {
+    display: inline-block;
+    width: 3px;
+    background-color: #000;
+    margin-left: 2px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { background-color: #000; }
+    49% { background-color: #000; }
+    50% { background-color: transparent; }
+    99% { background-color: transparent; }
+    100% { background-color: #000; }
 }
