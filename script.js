@@ -238,6 +238,9 @@ function makeDraggable(element, project = null, fileType = null) {
 
 // create and show finder window for project
 function openFinder(project) {
+    // Remove any existing finder windows
+    document.querySelectorAll('.finder-window:not(#finder-template)').forEach(window => window.remove());
+    
     const finderTemplate = document.getElementById('finder-template');
     const finder = finderTemplate.cloneNode(true);
     finder.id = `finder-${project.name.toLowerCase().replace(/\s+/g, '-')}`;
@@ -256,6 +259,10 @@ function openFinder(project) {
         if (project.filePositions[fileType]) {
             file.style.left = `${project.filePositions[fileType].x}px`;
             file.style.top = `${project.filePositions[fileType].y}px`;
+        } else {
+            // Reset position if none saved
+            file.style.left = '';
+            file.style.top = '';
         }
         
         // set file extension based on project language

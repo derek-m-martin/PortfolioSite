@@ -284,6 +284,7 @@ html, body {
 }
 
 .finder-window {
+    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -294,6 +295,10 @@ html, body {
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 1000;
+}
+
+#finder-template {
+    display: none !important;
 }
 
 .finder-window.active {
