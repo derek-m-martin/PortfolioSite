@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Derek Martin's Portfolio - Showcasing my work and skills">
     <meta name="author" content="Derek Martin">
     <title>Derek Martin | Portfolio</title>
     <link rel="stylesheet" href="style.css">
+
 </head>
 <body>
+
     <nav class="nav-menu">
         <ul>
+
             <li><a href="#landing" class="nav-link"><span class="nav-number">01</span> MAIN</a></li>
             <li><a href="#about" class="nav-link"><span class="nav-number">02</span> ABOUT</a></li>
             <li><a href="#projects" class="nav-link"><span class="nav-number">03</span> PROJECTS</a></li>
             <li><a href="#contact" class="nav-link"><span class="nav-number">04</span> CONTACT</a></li>
+
         </ul>
     </nav>
 
     <section id="landing" class="section landing-section">
         <header>
             <div></div>
+
             <h1 class="centered-title">
                 Hey, I'm Derek and I do 
                 <span class="typed-text"></span>
                 <span class="cursor">&nbsp;</span>
             </h1>
+
             <div class="social-links">
                 <div class="social-item">
                     <a href="https://www.linkedin.com/in/derekmmartin/" target="_blank">
@@ -46,6 +53,7 @@
                     </a>
                 </div>
             </div>
+
             <div class="github-status">
                 <p>According to my GitHub, I recently worked on my <a id="latest-repo" target="_blank">Loading...</a> repository!</p>
             </div>
@@ -58,8 +66,68 @@
     </section>
 
     <section id="projects" class="section projects-section">
-        <h2>Projects</h2>
-        <p>placeholderrrrrrr</p>
+
+        <div class="finder-desktop"></div>
+        
+        <div class="finder-window" id="finder-template">
+
+            <div class="finder-header">
+                <div class="finder-controls">
+                    <span class="control close"></span>
+                    <span class="control minimize"></span>
+                    <span class="control expand"></span>
+                </div>
+
+                <div class="finder-title">
+                    <img src="assets/mac_folder.png" alt="Folder" class="finder-icon">
+                    <span class="project-name">Project Name</span>
+                </div>
+
+            </div>
+
+            <div class="finder-content">
+                <div class="finder-sidebar">
+                    <div class="sidebar-section">Favorites</div>
+                    <div class="sidebar-button">Dropbox</div>
+                    <div class="sidebar-button">Applications</div>
+                    <div class="sidebar-button">Internships</div>
+                    <div class="sidebar-section">iCloud</div>
+                    <div class="sidebar-button">DerekMartin</div>
+                    <div class="sidebar-button">iCloud Drive</div>
+                    <div class="sidebar-button">Documents</div>
+                    <div class="sidebar-section">Locations</div>
+                    <div class="sidebar-button">Vancouver</div>
+                    <div class="sidebar-button">Kitchener</div>
+                </div>
+
+                <div class="finder-files">
+
+                    <div class="file" data-type="readme">
+                        <img src="assets/paper.png" alt="Text File" class="file-icon">
+                        <div class="file-name">readme.txt</div>
+                    </div>
+
+                    <div class="file" data-type="code">
+                        <img src="assets/paper.png" alt="Code File" class="file-icon">
+                        <div class="file-name">code_snippet.txt</div>
+                    </div>
+
+                    <div class="file" data-type="demo">
+                        <img src="assets/paper.png" alt="Demo File" class="file-icon">
+                        <div class="file-name">demo.proj</div>
+                    </div>
+
+                    <div class="file" data-type="screenshot">
+                        <img src="assets/paper.png" alt="Screenshot File" class="file-icon">
+                        <div class="file-name">screenshot.jpg</div>
+                    </div>
+
+                    <div class="screenshots-container"></div>
+
+                </div>
+                <div class="finder-preview"></div>
+            </div>
+        </div>
     </section>
 
     <section id="contact" class="section contact-section">
