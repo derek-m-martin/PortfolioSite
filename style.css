@@ -337,6 +337,18 @@ html, body {
     gap: 8px;
 }
 
+.user-name {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
+.default-name {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
 .finder-icon {
     width: 20px;
     height: 20px;
@@ -354,6 +366,8 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    height: 94.6%;
+    border-bottom-left-radius: 10px;
 }
 
 .sidebar-button {
