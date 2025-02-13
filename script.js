@@ -87,6 +87,9 @@ const projects = [
     {
         name: "Portfolio Website",
         language: "js",
+        description: "My personal portfolio website to showcase my projects and skills",
+        techStack: ["HTML", "CSS", "JavaScript"],
+        lastUpdated: "2024-02-10",
         position: { x: 0, y: 0 },
         readme: "Demo readme content...",
         code: "// Demo code content...",
@@ -96,6 +99,9 @@ const projects = [
     {
         name: "Finance Tracker",
         language: "java",
+        description: "Personal finance tracking application for a school project",
+        techStack: ["Java"],
+        lastUpdated: "2024-02-08",
         position: { x: 0, y: 0 },
         readme: "Demo readme content...",
         code: "// Demo code content...",
@@ -105,6 +111,9 @@ const projects = [
     {
         name: "EvoEstimator",
         language: "swift",
+        description: "iOS app for providing real-time cost estimates for Vancouver's Evo Car-Share service",
+        techStack: ["Swift", "SwiftUI", "Google API's"],
+        lastUpdated: "2024-02-05",
         position: { x: 0, y: 0 },
         readme: "Demo readme content...",
         code: "// Demo code content...",
@@ -163,82 +172,272 @@ function getRandomPosition(folderWidth, folderHeight, existingPositions = []) {
 function initializeProjects() {
     if (projectsInitialized) return;
     
-    const desktop = document.querySelector('.finder-desktop');
-    desktop.innerHTML = '';
-    
-    const folderWidth = 160;
-    const folderHeight = 140;
-    const existingPositions = [];
+    const foldersContainer = document.querySelector('.folders-container');
+    foldersContainer.innerHTML = '';
     
     // make and place folder elements for each project
     const folderElements = projects.map(project => {
-        const position = getRandomPosition(folderWidth, folderHeight, existingPositions);
-        existingPositions.push(position);
-        project.position = position;
-        
         const folder = document.createElement('div');
         folder.className = 'project-folder';
-        folder.style.left = position.x + 'px';
-        folder.style.top = position.y + 'px';
         
         folder.innerHTML = `
             <img src="assets/mac_folder.png" alt="Folder">
             <div class="folder-name">${project.name}</div>
         `;
         
-        makeDraggable(folder);
+        makeDraggable(folder, project);
+        
+        folder.addEventListener('mouseenter', () => updateProjectInfo(project));
         folder.addEventListener('dblclick', () => openFinder(project));
         
         return folder;
     });
     
-    desktop.append(...folderElements);
+    foldersContainer.append(...folderElements);
+    
+    // initialize with first project's info
+    if (projects.length > 0) {
+        updateProjectInfo(projects[0]);
+    }
+    
     projectsInitialized = true;
+
+    // set up finder window controls
+    document.querySelectorAll('.control.close').forEach(control => {
+        control.addEventListener('click', (e) => {
+            const finderWindow = e.target.closest('.finder-window');
+            if (finderWindow) {
+                finderWindow.classList.remove('active');
+            }
+        });
+    });
+}
+
+// update project info panel
+function updateProjectInfo(project) {
+    const projectInfo = document.querySelector('.project-info');
+    projectInfo.innerHTML = `
+        <h2 class="project-info-title">${project.name}</h2>
+        <p class="project-description">${project.description}</p>
+        <div class="tech-stack">
+            ${project.techStack.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
+        </div>
+        <p class="last-updated">Last updated: ${project.lastUpdated}</p>
+    `;
+}
+
+// fetch and show github activity
+async function fetchGitHubActivity() {
+    try {
+        const response = await fetch('https://api.github.com/users/derek-m-martin/events?per_page=30');
+        const events = await response.json();
+        
+        const activityContainer = document.querySelector('.github-activity');
+        const activityItems = events
+            .map(event => {
+                let actionText = '';
+                let detailText = '';
+                const repoName = event.repo.name.split('/')[1];
+                const date = new Date(event.created_at);
+                const formattedDate = date.toLocaleDateString('en-US', {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                switch(event.type) {
+                    case 'PushEvent':
+                        const commit = event.payload.commits[0];
+                        actionText = `Pushed a commit to`;
+                        detailText = commit.message;
+                        break;
+                    case 'CreateEvent':
+                        actionText = `Created a ${event.payload.ref_type}`;
+                        if (event.payload.ref) {
+                            detailText = `Named: ${event.payload.ref}`;
+                        }
+                        break;
+                    case 'DeleteEvent':
+                        actionText = `Deleted a ${event.payload.ref_type}`;
+                        if (event.payload.ref) {
+                            detailText = `Named: ${event.payload.ref}`;
+                        }
+                        break;
+                    case 'PullRequestEvent':
+                        actionText = `${event.payload.action} a pull request in`;
+                        detailText = event.payload.pull_request.title;
+                        break;
+                    case 'IssuesEvent':
+                        actionText = `${event.payload.action} an issue in`;
+                        detailText = event.payload.issue.title;
+                        break;
+                    case 'ForkEvent':
+                        actionText = `Forked`;
+                        detailText = `to ${event.payload.forkee.full_name}`;
+                        break;
+                    case 'WatchEvent':
+                        actionText = `Starred`;
+                        break;
+                    case 'PublicEvent':
+                        actionText = `Made public`;
+                        break;
+                    default:
+                        return null;
+                }
+                
+                return `
+                    <div class="activity-item">
+                        <div>${actionText} <a href="https://github.com/${event.repo.name}" target="_blank">${repoName}</a></div>
+                        ${detailText ? `<div class="activity-message">${detailText}</div>` : ''}
+                        <div class="activity-time">${formattedDate}</div>
+                    </div>
+                `;
+            })
+            .filter(item => item !== null)
+            .join('');
+        
+        activityContainer.innerHTML = `
+            <h2 class="activity-title">Recent Activity</h2>
+            ${activityItems}
+        `;
+
+        // set up intersection observer for fade-in effect
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            root: activityContainer,
+            threshold: 0.1,
+            rootMargin: '10px'
+        });
+
+        // observe all activity items
+        document.querySelectorAll('.activity-item').forEach(item => {
+            observer.observe(item);
+        });
+
+    } catch (error) {
+        console.error('Error fetching GitHub activity:', error);
+        const activityContainer = document.querySelector('.github-activity');
+        activityContainer.innerHTML = `
+            <h2 class="activity-title">Recent Activity</h2>
+            <div class="activity-item visible">Error loading GitHub activity</div>
+        `;
+    }
+}
+
+// set up periodic GitHub activity updates
+function initializeGitHubActivity() {
+    fetchGitHubActivity();
+    // Update every 5 minutes
+    setInterval(fetchGitHubActivity, 5 * 60 * 1000);
 }
 
 // add drag functionality to folders and files
-function makeDraggable(element, project = null, fileType = null) {
+function makeDraggable(element, project, fileType) {
     let isDragging = false;
-    let currentX = parseInt(element.style.left) || 0;
-    let currentY = parseInt(element.style.top) || 0;
     let startX;
     let startY;
+    let initialLeft;
+    let initialTop;
 
     element.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
 
     function onMouseDown(e) {
+        if (e.target.classList.contains('control')) return;
+        
         isDragging = true;
-        startX = e.clientX - currentX;
-        startY = e.clientY - currentY;
-        e.preventDefault();
-    }
-
-    function onMouseMove(e) {
-        if (!isDragging) return;
+        const rect = element.getBoundingClientRect();
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        startX = e.clientX - initialLeft;
+        startY = e.clientY - initialTop;
+        element.style.cursor = 'grabbing';
         
-        currentX = e.clientX - startX;
-        currentY = e.clientY - startY;
-        
-        element.style.left = currentX + 'px';
-        element.style.top = currentY + 'px';
-
-        if (project && fileType) {
-            project.filePositions[fileType] = { x: currentX, y: currentY };
+        // if it's a file in the finder window, get its position relative to the finder-files container
+        if (fileType) {
+            const finderFiles = element.closest('.finder-files');
+            if (finderFiles) {
+                const finderRect = finderFiles.getBoundingClientRect();
+                initialLeft = rect.left - finderRect.left;
+                initialTop = rect.top - finderRect.top;
+                startX = e.clientX - rect.left;
+                startY = e.clientY - rect.top;
+            }
         }
         
         e.preventDefault();
     }
 
+    function onMouseMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        if (fileType) {
+            // for files in finder window, position relative to finder-files container
+            const finderFiles = element.closest('.finder-files');
+            if (finderFiles) {
+                const finderRect = finderFiles.getBoundingClientRect();
+                const x = e.clientX - finderRect.left - startX;
+                const y = e.clientY - finderRect.top - startY;
+                
+                element.style.position = 'absolute';
+                element.style.left = `${x}px`;
+                element.style.top = `${y}px`;
+                
+                // save position for this file type
+                if (project.filePositions) {
+                    project.filePositions[fileType] = { x, y };
+                }
+            }
+        } else {
+            // for desktop folders
+            const x = e.clientX - startX;
+            const y = e.clientY - startY;
+            element.style.position = 'absolute';
+            element.style.left = `${x}px`;
+            element.style.top = `${y}px`;
+            project.position = { x, y };
+        }
+    }
+
     function onMouseUp() {
         isDragging = false;
+        element.style.cursor = fileType ? 'move' : 'grab';
     }
 }
 
+// start projects and fetch activity when projects section becomes active
+document.addEventListener('DOMContentLoaded', () => {
+    const projectsSection = document.getElementById('projects');
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.target.classList.contains('active')) {
+                initializeProjects();
+                initializeGitHubActivity();
+            }
+        });
+    });
+    
+    observer.observe(projectsSection, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+});
+
 // create and show finder window for project
 function openFinder(project) {
-    // Remove any existing finder windows
+    // Hide folders
+    const foldersContainer = document.querySelector('.folders-container');
+    foldersContainer.style.opacity = '0';
+    foldersContainer.style.pointerEvents = 'none';
+    
+    // remove any existing finder windows
     document.querySelectorAll('.finder-window:not(#finder-template)').forEach(window => window.remove());
     
     const finderTemplate = document.getElementById('finder-template');
@@ -248,39 +447,60 @@ function openFinder(project) {
 
     // set up window content and controls
     finder.querySelector('.project-name').textContent = project.name;
-    finder.querySelector('.close').onclick = () => finder.remove();
+    finder.querySelector('.close').onclick = () => {
+        finder.remove();
+        // show folders when finder is closed
+        foldersContainer.style.opacity = '1';
+        foldersContainer.style.pointerEvents = 'all';
+    };
     finder.querySelector('.minimize').onclick = () => finder.classList.remove('active');
 
     // set up files in finder window
-    finder.querySelectorAll('.file').forEach(file => {
-        const fileType = file.dataset.type;
+    const finderFiles = finder.querySelector('.finder-files');
+    finderFiles.innerHTML = ''; // Clear existing files
+    
+    // create files with proper layout
+    const fileTypes = ['readme', 'code', 'demo', 'preview'];
+    fileTypes.forEach(fileType => {
+        const file = document.createElement('div');
+        file.className = 'file';
+        file.dataset.type = fileType;
         
-        // restore saved file positions
-        if (project.filePositions[fileType]) {
-            file.style.left = `${project.filePositions[fileType].x}px`;
-            file.style.top = `${project.filePositions[fileType].y}px`;
-        } else {
-            // Reset position if none saved
-            file.style.left = '';
-            file.style.top = '';
+        let iconSrc, fileName;
+        switch(fileType) {
+            case 'readme':
+                iconSrc = 'assets/paper.png';
+                fileName = 'readme.txt';
+                break;
+            case 'code':
+                iconSrc = 'assets/code_icon.png';
+                fileName = `code_snippet.${project.language || 'txt'}`;
+                break;
+            case 'demo':
+                iconSrc = 'assets/project_icon.png';
+                fileName = 'demo.proj';
+                break;
+            case 'preview':
+                iconSrc = 'assets/photo_icon.png';
+                fileName = 'screenshot.jpg';
+                break;
         }
         
-        // set file extension based on project language
-        if (fileType === 'code') {
-            const fileNameElement = file.querySelector('.file-name');
-            const extension = project.language || 'txt';
-            fileNameElement.textContent = `code_snippet.${extension}`;
-        }
+        file.innerHTML = `
+            <img src="${iconSrc}" alt="${fileType} File" class="file-icon">
+            <div class="file-name">${fileName}</div>
+        `;
         
         makeDraggable(file, project, fileType);
         
         file.addEventListener('dblclick', () => {
-            const type = file.dataset.type;
-            alert(`Opening ${type} file... (to be implemented)`);
+            alert(`Opening ${fileType} file... (to be implemented)`);
         });
+        
+        finderFiles.appendChild(file);
     });
     
-    document.body.appendChild(finder);
+    document.querySelector('.finder-desktop').appendChild(finder);
     
     // enable dragging finder window by header
     let isDragging = false;
@@ -320,19 +540,17 @@ function openFinder(project) {
     });
 }
 
-// start projects when projects section becomes active
-document.addEventListener('DOMContentLoaded', () => {
-    const projectsSection = document.getElementById('projects');
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.target.classList.contains('active')) {
-                initializeProjects();
-            }
-        });
-    });
-    
-    observer.observe(projectsSection, {
-        attributes: true,
-        attributeFilter: ['class']
-    });
-});
+// helper function to get file icon based on extension
+function getFileIcon(filename) {
+    const ext = filename.split('.').pop().toLowerCase();
+    const iconMap = {
+        html: 'code_icon.png',
+        css: 'code_icon.png',
+        js: 'js.png',
+        java: 'code_icon.png',
+        swift: 'code_icon.png',
+        md: 'paper.png'
+    };
+    return iconMap[ext] || 'code_icon.png';
+}
+

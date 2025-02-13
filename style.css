@@ -262,47 +262,204 @@ html, body {
     width: 100%;
     height: 100vh;
     position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.folders-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    padding: 20px;
+    height: 100%;
+    transition: opacity 0.3s ease;
 }
 
 .project-folder {
-    position: absolute;
-    width: 160px;
+    position: relative;
+    width: 200px;
     text-align: center;
     cursor: move;
+    transition: transform 0.2s ease;
 }
 
 .project-folder img {
-    width: 110px;
-    height: 88px;
-    margin-bottom: 8px;
+    width: 140px;
+    height: 104px;
+    margin-bottom: 12px;
+    filter: brightness(0.95);
 }
 
 .project-folder .folder-name {
     color: white;
-    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
     word-wrap: break-word;
+    opacity: 0.9;
+}
+
+.project-folder:hover {
+    transform: scale(1.02);
+}
+
+.project-folder:hover img {
+    filter: brightness(1);
+}
+
+.project-folder:hover .folder-name {
+    opacity: 1;
+}
+
+.right-section {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 20px;
+    gap: 15px;
+    margin-top: 80px;
+    height: calc(100vh - 120px);
+}
+
+.github-activity {
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 12px;
+    padding: 15px 25px;
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
+}
+
+.activity-title {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    margin-top: 0;
+    opacity: 0.8;
+}
+
+/* Scrollbar styling */
+.github-activity::-webkit-scrollbar {
+    width: 8px;
+}
+
+.github-activity::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.3);
+    border-radius: 4px;
+}
+
+.github-activity::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.github-activity::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.activity-item {
+    background: rgba(40, 40, 40, 0.7);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.activity-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.activity-message {
+    color: #888;
+    font-size: 0.95rem;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.activity-item a {
+    color: #2196f3;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.activity-item a:hover {
+    opacity: 0.8;
+}
+
+.project-info {
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 12px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    max-height: 220px;
+}
+
+.project-info-title {
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.project-description {
+    color: #888;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.tech-stack {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.tech-badge {
+    background: #ffffff;
+    color: #000000;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+}
+
+.last-updated {
+    color: #888;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    margin-top: 15px;
 }
 
 .finder-window {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 50%;
-    left: 50%;
+    left: 25%;
     transform: translate(-50%, -50%);
-    width: 800px;
+    width: 700px;
     height: 500px;
-    background-color: #2a2a2a;
+    background: rgba(28, 28, 28, 0.8);
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-}
-
-#finder-template {
-    display: none !important;
 }
 
 .finder-window.active {
     display: block;
+}
+
+#finder-template {
+    display: none !important;
 }
 
 .finder-header {
@@ -407,11 +564,12 @@ html, body {
     background-color: #2a2a2a;
     padding: 20px;
     position: relative;
-    min-height: 400px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    align-content: flex-start;
+    height: calc(100% - 50px);
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 20px;
+    align-content: start;
 }
 
 .file {
@@ -419,9 +577,15 @@ html, body {
     width: 100px;
     text-align: center;
     cursor: move;
+    user-select: none;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: transform 0.2s ease;
+}
+
+.file:hover {
+    transform: scale(1.05);
 }
 
 .file-icon {
@@ -429,6 +593,7 @@ html, body {
     height: 64px;
     margin-bottom: 8px;
     object-fit: contain;
+    pointer-events: none;
 }
 
 .file-name {
@@ -437,6 +602,8 @@ html, body {
     font-size: 0.9rem;
     width: 100%;
     text-align: center;
+    pointer-events: none;
+    word-wrap: break-word;
 }
 
 .finder-preview {

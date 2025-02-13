@@ -66,68 +66,83 @@
     </section>
 
     <section id="projects" class="section projects-section">
-
-        <div class="finder-desktop"></div>
-        
-        <div class="finder-window" id="finder-template">
-
-            <div class="finder-header">
-                <div class="finder-controls">
-                    <span class="control close"></span>
-                    <span class="control minimize"></span>
-                    <span class="control expand"></span>
+        <div class="finder-desktop">
+            
+            <div class="folders-container">
+            </div>
+            
+            <div class="right-section">
+                <div class="github-activity">
+                    <h2 class="activity-title">Recent Activity</h2>
                 </div>
-
-                <div class="finder-title">
-                    <img src="assets/mac_folder.png" alt="Folder" class="finder-icon">
-                    <span class="default-name">Users -> </span>
-                    <span class="user-name">DerekMartin -> </span>
-                    <span class="project-name">Project Name</span>
+                
+                <div class="project-info">
+                    <h2 class="project-info-title">Portfolio Website</h2>
+                    <p class="project-description">My personal portfolio website to showcase my projects and skills</p>
+                    <div class="tech-stack">
+                        <span class="tech-badge">HTML</span>
+                        <span class="tech-badge">CSS</span>
+                        <span class="tech-badge">JavaScript</span>
+                    </div>
+                    <p class="last-updated">Last updated: 2024-02-10</p>
                 </div>
-
             </div>
 
-            <div class="finder-content">
-                <div class="finder-sidebar">
-                    <div class="sidebar-section">Favorites</div>
-                    <div class="sidebar-button">Dropbox</div>
-                    <div class="sidebar-button">Applications</div>
-                    <div class="sidebar-button">Internships</div>
-                    <div class="sidebar-section">iCloud</div>
-                    <div class="sidebar-button">DerekMartin</div>
-                    <div class="sidebar-button">iCloud Drive</div>
-                    <div class="sidebar-button">Documents</div>
-                    <div class="sidebar-section">Locations</div>
-                    <div class="sidebar-button">Vancouver</div>
-                    <div class="sidebar-button">Kitchener</div>
+            <div id="finder-template" class="finder-window">
+                <div class="finder-header">
+                    <div class="finder-controls">
+                        <span class="control close"></span>
+                        <span class="control minimize"></span>
+                        <span class="control expand"></span>
+                    </div>
+                    <div class="finder-title">
+                        <img src="assets/mac_folder.png" alt="Folder" class="finder-icon">
+                        <span class="default-name">Users -> </span>
+                        <span class="user-name">DerekMartin -> </span>
+                        <span class="project-name">Project Name</span>
+                    </div>
                 </div>
 
-                <div class="finder-files">
-
-                    <div class="file" data-type="readme">
-                        <img src="assets/paper.png" alt="Text File" class="file-icon">
-                        <div class="file-name">readme.txt</div>
+                <div class="finder-content">
+                    <div class="finder-sidebar">
+                        <div class="sidebar-section">Favorites</div>
+                        <div class="sidebar-button">Dropbox</div>
+                        <div class="sidebar-button">Applications</div>
+                        <div class="sidebar-button">Internships</div>
+                        <div class="sidebar-section">iCloud</div>
+                        <div class="sidebar-button">DerekMartin</div>
+                        <div class="sidebar-button">iCloud Drive</div>
+                        <div class="sidebar-button">Documents</div>
+                        <div class="sidebar-section">Locations</div>
+                        <div class="sidebar-button">Vancouver</div>
+                        <div class="sidebar-button">Kitchener</div>
                     </div>
 
-                    <div class="file" data-type="code">
-                        <img src="assets/code_icon.png" alt="Code File" class="file-icon">
-                        <div class="file-name">code_snippet.txt</div>
+                    <div class="finder-files">
+                        <div class="file" data-type="readme">
+                            <img src="assets/paper.png" alt="Text File" class="file-icon">
+                            <div class="file-name">readme.txt</div>
+                        </div>
+
+                        <div class="file" data-type="code">
+                            <img src="assets/code_icon.png" alt="Code File" class="file-icon">
+                            <div class="file-name">code_snippet.txt</div>
+                        </div>
+
+                        <div class="file" data-type="demo">
+                            <img src="assets/project_icon.png" alt="Demo File" class="file-icon">
+                            <div class="file-name">demo.proj</div>
+                        </div>
+
+                        <div class="file" data-type="preview">
+                            <img src="assets/photo_icon.png" alt="Screenshot File" class="file-icon">
+                            <div class="file-name">screenshot.jpg</div>
+                        </div>
+
+                        <div class="screenshots-container"></div>
                     </div>
-
-                    <div class="file" data-type="demo">
-                        <img src="assets/project_icon.png" alt="Demo File" class="file-icon">
-                        <div class="file-name">demo.proj</div>
-                    </div>
-
-                    <div class="file" data-type="preview">
-                        <img src="assets/photo_icon.png" alt="Screenshot File" class="file-icon">
-                        <div class="file-name">screenshot.jpg</div>
-                    </div>
-
-                    <div class="screenshots-container"></div>
-
+                    <div class="finder-preview"></div>
                 </div>
-                <div class="finder-preview"></div>
             </div>
         </div>
     </section>
