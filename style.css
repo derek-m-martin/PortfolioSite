@@ -84,7 +84,8 @@ html {
     scroll-behavior: smooth;
 }
 
-html, body {
+html,
+body {
     background-color: #141414;
     margin: 0;
     padding: 0;
@@ -94,7 +95,7 @@ html, body {
 
 .typed-text {
     font-weight: 600;
-    color: #2196f3; 
+    color: #2196f3;
 }
 
 .cursor {
@@ -106,11 +107,25 @@ html, body {
 }
 
 @keyframes blink {
-    0% { background-color: #ffffff; }
-    49% { background-color: #ffffff; }
-    50% { background-color: transparent; }
-    99% { background-color: transparent; }
-    100% { background-color: #ffffff; }
+    0% {
+        background-color: #ffffff;
+    }
+
+    49% {
+        background-color: #ffffff;
+    }
+
+    50% {
+        background-color: transparent;
+    }
+
+    99% {
+        background-color: transparent;
+    }
+
+    100% {
+        background-color: #ffffff;
+    }
 }
 
 .nav-menu {
@@ -484,9 +499,17 @@ html, body {
     cursor: pointer;
 }
 
-.close { background-color: #ff5f56; }
-.minimize { background-color: #ffbd2e; }
-.expand { background-color: #27c93f; }
+.close {
+    background-color: #ff5f56;
+}
+
+.minimize {
+    background-color: #ffbd2e;
+}
+
+.expand {
+    background-color: #27c93f;
+}
 
 .finder-title {
     display: flex;
@@ -623,4 +646,420 @@ html, body {
     object-fit: cover;
     border-radius: 4px;
     cursor: pointer;
+}
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 1400px;
+    width: 90%;
+    margin: 0 auto;
+    height: 100%;
+    padding: 100px 0 40px;
+    box-sizing: border-box;
+    max-height: 100vh;
+}
+
+.skills-section,
+.journey-section {
+    background: rgba(30, 30, 30, 0.7);
+    border-radius: 12px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+    height: calc(100vh - 160px);
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.skills-section h2,
+.journey-section h2 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    margin: 0 0 20px 0;
+    font-weight: 600;
+}
+
+.skill-bars {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 25px;
+    overflow-y: auto;
+    padding-right: 10px;
+    flex: 1;
+}
+
+.skill-item {
+    width: 100%;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.skill-info {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.skill-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 0;
+    overflow: visible;
+    position: relative;
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.skill-fill {
+    height: 100%;
+    background: #2196f3;
+    border-radius: 0;
+    transition: width 1s ease-in-out;
+    position: relative;
+    mix-blend-mode: screen;
+}
+
+/* Move lines below the bar */
+.skill-bar::before {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 1px, transparent 1px,
+            transparent 24.9%, rgba(255, 255, 255, 0.3) 24.9%, rgba(255, 255, 255, 0.3) calc(25% + 1px), transparent calc(25% + 1px),
+            transparent 49.9%, rgba(255, 255, 255, 0.3) 49.9%, rgba(255, 255, 255, 0.3) calc(50% + 1px), transparent calc(50% + 1px),
+            transparent 74.9%, rgba(255, 255, 255, 0.3) 74.9%, rgba(255, 255, 255, 0.3) calc(75% + 1px), transparent calc(75% + 1px),
+            transparent 99.9%, rgba(255, 255, 255, 0.3) 99.9%, rgba(255, 255, 255, 0.3) calc(100% + 1px), transparent calc(100% + 1px));
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Style for the active threshold label and its marker */
+.skill-item[data-level="No Experience"] .skill-bar::before {
+    background: linear-gradient(to right,
+            #ffffff 0%, #ffffff 1px, transparent 1px,
+            transparent 24.9%, rgba(255, 255, 255, 0.3) 24.9%, rgba(255, 255, 255, 0.3) calc(25% + 1px), transparent calc(25% + 1px),
+            transparent 49.9%, rgba(255, 255, 255, 0.3) 49.9%, rgba(255, 255, 255, 0.3) calc(50% + 1px), transparent calc(50% + 1px),
+            transparent 74.9%, rgba(255, 255, 255, 0.3) 74.9%, rgba(255, 255, 255, 0.3) calc(75% + 1px), transparent calc(75% + 1px),
+            transparent 99.9%, rgba(255, 255, 255, 0.3) 99.9%, rgba(255, 255, 255, 0.3) calc(100% + 1px), transparent calc(100% + 1px));
+}
+
+.skill-item[data-level="Learning"] .skill-bar::before {
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 1px, transparent 1px,
+            transparent 24.9%, #ffffff 24.9%, #ffffff calc(25% + 1px), transparent calc(25% + 1px),
+            transparent 49.9%, rgba(255, 255, 255, 0.3) 49.9%, rgba(255, 255, 255, 0.3) calc(50% + 1px), transparent calc(50% + 1px),
+            transparent 74.9%, rgba(255, 255, 255, 0.3) 74.9%, rgba(255, 255, 255, 0.3) calc(75% + 1px), transparent calc(75% + 1px),
+            transparent 99.9%, rgba(255, 255, 255, 0.3) 99.9%, rgba(255, 255, 255, 0.3) calc(100% + 1px), transparent calc(100% + 1px));
+}
+
+.skill-item[data-level="Proficient"] .skill-bar::before {
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 1px, transparent 1px,
+            transparent 24.9%, rgba(255, 255, 255, 0.3) 24.9%, rgba(255, 255, 255, 0.3) calc(25% + 1px), transparent calc(25% + 1px),
+            transparent 49.9%, #ffffff 49.9%, #ffffff calc(50% + 1px), transparent calc(50% + 1px),
+            transparent 74.9%, rgba(255, 255, 255, 0.3) 74.9%, rgba(255, 255, 255, 0.3) calc(75% + 1px), transparent calc(75% + 1px),
+            transparent 99.9%, rgba(255, 255, 255, 0.3) 99.9%, rgba(255, 255, 255, 0.3) calc(100% + 1px), transparent calc(100% + 1px));
+}
+
+.skill-item[data-level="Experienced"] .skill-bar::before {
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 1px, transparent 1px,
+            transparent 24.9%, rgba(255, 255, 255, 0.3) 24.9%, rgba(255, 255, 255, 0.3) calc(25% + 1px), transparent calc(25% + 1px),
+            transparent 49.9%, rgba(255, 255, 255, 0.3) 49.9%, rgba(255, 255, 255, 0.3) calc(50% + 1px), transparent calc(50% + 1px),
+            transparent 74.9%, #ffffff 74.9%, #ffffff calc(75% + 1px), transparent calc(75% + 1px),
+            transparent 99.9%, rgba(255, 255, 255, 0.3) 99.9%, rgba(255, 255, 255, 0.3) calc(100% + 1px), transparent calc(100% + 1px));
+}
+
+.skill-item[data-level="Expert"] .skill-bar::before {
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.3) 1px, transparent 1px,
+            transparent 24.9%, rgba(255, 255, 255, 0.3) 24.9%, rgba(255, 255, 255, 0.3) calc(25% + 1px), transparent calc(25% + 1px),
+            transparent 49.9%, rgba(255, 255, 255, 0.3) 49.9%, rgba(255, 255, 255, 0.3) calc(50% + 1px), transparent calc(50% + 1px),
+            transparent 74.9%, rgba(255, 255, 255, 0.3) 74.9%, rgba(255, 255, 255, 0.3) calc(75% + 1px), transparent calc(75% + 1px),
+            transparent 99.9%, #ffffff 99.9%, #ffffff calc(100% + 1px), transparent calc(100% + 1px));
+}
+
+/* Style for the active threshold label */
+.skill-item[data-level="No Experience"] .skill-thresholds span:nth-child(1),
+.skill-item[data-level="Learning"] .skill-thresholds span:nth-child(2),
+.skill-item[data-level="Proficient"] .skill-thresholds span:nth-child(3),
+.skill-item[data-level="Experienced"] .skill-thresholds span:nth-child(4),
+.skill-item[data-level="Expert"] .skill-thresholds span:nth-child(5) {
+    opacity: 1;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+/* Remove the ::after pseudo-element as we don't need it anymore */
+.skill-item[data-level="No Experience"] .skill-thresholds::after,
+.skill-item[data-level="Learning"] .skill-thresholds::after,
+.skill-item[data-level="Proficient"] .skill-thresholds::after,
+.skill-item[data-level="Experienced"] .skill-thresholds::after,
+.skill-item[data-level="Expert"] .skill-thresholds::after {
+    display: none;
+}
+
+.timeline {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.timeline-items-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.timeline-items-wrapper {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s ease;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 40px;
+    opacity: 0.5;
+    transform-origin: left center;
+    transition: all 0.5s ease;
+}
+
+.timeline-item.active {
+    opacity: 1;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #2196f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    overflow: hidden;
+}
+
+/* Add the vertical line through icons */
+.timeline-items-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    /* Center of the 32px icon */
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(33, 150, 243, 0.3);
+    z-index: 1;
+}
+
+/* Timeline icon styles for different types */
+.timeline-icon.project::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-image: url('assets/work_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0) invert(1);
+}
+
+.timeline-icon.work::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-image: url('assets/work_icon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0) invert(1);
+}
+
+.timeline-icon.education::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-image: url('assets/grad_cap.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0) invert(1);
+}
+
+.timeline-date {
+    color: #2196f3;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.timeline-content h3 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin: 0 0 8px 0;
+}
+
+.timeline-content h4 {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+    margin: 0 0 8px 0;
+}
+
+.timeline-content p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.timeline-navigation {
+    margin-top: auto;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(30, 30, 30, 0.3);
+    border-radius: 0 0 12px 12px;
+    z-index: 2;
+}
+
+.timeline-nav-button {
+    background: rgba(33, 150, 243, 0.1);
+    border: 1px solid #2196f3;
+    color: #2196f3;
+    padding: 8px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.timeline-nav-button:hover {
+    background: rgba(33, 150, 243, 0.2);
+}
+
+.timeline-nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Remove the arrow pseudo-elements */
+.timeline-nav-button::before,
+.timeline-nav-button::after {
+    display: none;
+}
+
+/* Scrollbar styling for both skills and timeline */
+.skill-bars::-webkit-scrollbar,
+.timeline-items-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.skill-bars::-webkit-scrollbar-track,
+.timeline-items-container::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.3);
+    border-radius: 4px;
+}
+
+.skill-bars::-webkit-scrollbar-thumb,
+.timeline-items-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    transition: background 0.2s ease;
+}
+
+.skill-bars::-webkit-scrollbar-thumb:hover,
+.timeline-items-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.timeline-content {
+    background: rgba(40, 40, 40, 0.7);
+    border-radius: 8px;
+    padding: 20px;
+    transform-origin: left center;
+    transform: scale(0.95);
+    transition: transform 0.5s ease;
+}
+
+.timeline-item.active .timeline-content {
+    transform: scale(1);
+}
+
+/* Add threshold labels */
+.skill-thresholds {
+    position: absolute;
+    bottom: -32px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.3);
+    pointer-events: none;
+}
+
+.skill-thresholds span {
+    position: absolute;
+    transform: translateX(-50%);
+    transition: all 0.3s ease;
+    opacity: 0.3;
+    width: 60px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.skill-thresholds span:nth-child(1) {
+    left: 0%;
+    transform: translateX(0);
+    text-align: left;
+}
+
+.skill-thresholds span:nth-child(2) {
+    left: 25%;
+}
+
+.skill-thresholds span:nth-child(3) {
+    left: 50%;
+}
+
+.skill-thresholds span:nth-child(4) {
+    left: 75%;
+}
+
+.skill-thresholds span:nth-child(5) {
+    left: 100%;
+    transform: translateX(-100%);
+    text-align: right;
+}
+
+@media (max-width: 1024px) {
+    .about-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
 }

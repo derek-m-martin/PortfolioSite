@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="style.css">
 
 </head>
+
 <body>
 
     <nav class="nav-menu">
@@ -28,7 +30,7 @@
             <div></div>
 
             <h1 class="centered-title">
-                Hey, I'm Derek and I do 
+                Hey, I'm Derek and I do
                 <span class="typed-text"></span>
                 <span class="cursor">&nbsp;</span>
             </h1>
@@ -55,27 +57,49 @@
             </div>
 
             <div class="github-status">
-                <p>According to my GitHub, I recently worked on my <a id="latest-repo" target="_blank">Loading...</a> repository!</p>
+                <p>According to my GitHub, I recently worked on my <a id="latest-repo" target="_blank">Loading...</a>
+                    repository!</p>
             </div>
         </header>
     </section>
 
     <section id="about" class="section about-section">
-        <h2>About Me</h2>
-        <p>placeholderrrrrrr</p>
+        <div class="about-container">
+            <div class="skills-section">
+                <h2>Skills</h2>
+                <div class="skill-bars">
+                    <!-- Skills will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <div class="journey-section">
+                <h2>My Journey</h2>
+                <div class="timeline">
+                    <div class="timeline-items-container">
+                        <div class="timeline-items-wrapper">
+                            <!-- Timeline items will be dynamically inserted here -->
+                        </div>
+                    </div>
+                    <div class="timeline-navigation">
+                        <button class="timeline-nav-button prev" disabled>Newer</button>
+                        <button class="timeline-nav-button next">Older</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <section id="projects" class="section projects-section">
         <div class="finder-desktop">
-            
+
             <div class="folders-container">
             </div>
-            
+
             <div class="right-section">
                 <div class="github-activity">
                     <h2 class="activity-title">Recent Activity</h2>
                 </div>
-                
+
                 <div class="project-info">
                     <h2 class="project-info-title">Portfolio Website</h2>
                     <p class="project-description">My personal portfolio website to showcase my projects and skills</p>
@@ -158,4 +182,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
