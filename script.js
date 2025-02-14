@@ -93,7 +93,7 @@ const projects = [
         language: "js",
         description: "My personal portfolio website to showcase my projects and skills",
         techStack: ["HTML", "CSS", "JavaScript"],
-        lastUpdated: "2024-02-10",
+        lastUpdated: "2025-02-14",
         position: { x: 0, y: 0 },
         readme: "Demo readme content...",
         code: "// Demo code content...",
@@ -105,7 +105,7 @@ const projects = [
         language: "java",
         description: "Personal finance tracking application for a school project",
         techStack: ["Java"],
-        lastUpdated: "2024-02-08",
+        lastUpdated: "2024-11-29",
         position: { x: 0, y: 0 },
         readme: "Demo readme content...",
         code: "// Demo code content...",
@@ -117,7 +117,7 @@ const projects = [
         language: "swift",
         description: "iOS app for providing real-time cost estimates for vancouver's evo car-share service",
         techStack: ["Swift", "SwiftUI", "Google API's"],
-        lastUpdated: "2024-02-05",
+        lastUpdated: "2025-02-05",
         position: { x: 0, y: 0 },
         readme: "Demo readme content...",
         code: "// Demo code content...",
@@ -232,7 +232,7 @@ async function fetchGitHubActivity() {
 
     // show loading state
     activityContainer.innerHTML = `
-    <h2 class="activity-title">recent activity</h2>
+    <h2 class="activity-title">Recent Activity</h2>
     <div class="activity-item visible">loading activity...</div>
   `;
 
@@ -306,7 +306,7 @@ async function fetchGitHubActivity() {
 
         // update activity container with fetched items
         activityContainer.innerHTML = `
-      <h2 class="activity-title">recent activity</h2>
+      <h2 class="activity-title">Recent Activity</h2>
       ${activityItems}
     `;
 
@@ -331,7 +331,7 @@ async function fetchGitHubActivity() {
     } catch (error) {
         console.error('error fetching github activity:', error);
         activityContainer.innerHTML = `
-      <h2 class="activity-title">recent activity</h2>
+      <h2 class="activity-title">Recent Activity</h2>
       <div class="activity-item visible">error loading github activity</div>
     `;
     }
@@ -578,7 +578,7 @@ function getFileIcon(filename) {
 const timelineItems = [
     {
         type: "project",
-        icon: "work_icon.png",
+        icon: "code_icon.png",
         date: "August 2024 - Present",
         title: "EvoEstimator iOS App",
         organization: "Personal Project",
