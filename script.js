@@ -1,73 +1,73 @@
-// select elements for typewriter effect
+// typewriter effect setup
 const typedTextSpan = document.querySelector(".typed-text");
 const cursor = document.querySelector(".cursor");
-
-// list of words for typewriter effect
 const words = ["Swift", "Java", "Python", "C#", "JavaScript", "HTML/CSS"];
-let wordIndex = 0; // current word index
-let charIndex = 0; // current character index
-let isDeleting = false; // flag to indicate deleting mode
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
 
-// main function to run typewriter effect
+// main typewriter function
 function type() {
     const currentWord = words[wordIndex];
-    updateCharIndex(); // update character index based on state
-    updateTypedText(currentWord); // update displayed text
-
-    // set typing speed based on whether text is being deleted or added
+    updateCharIndex();
+    updateTypedText(currentWord);
     let typeSpeed = isDeleting ? 100 : 200;
-
     if (!isDeleting && charIndex === currentWord.length) {
-        typeSpeed = 2000; // pause when word is fully typed
+        typeSpeed = 2000; // pause at full word
         isDeleting = true;
     } else if (isDeleting && charIndex === 0) {
-        isDeleting = false; // switch to typing mode
-        wordIndex = (wordIndex + 1) % words.length; // move to next word
-        typeSpeed = 500; // pause before starting new word
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        typeSpeed = 500; // pause before new word
     }
-
-    setTimeout(type, typeSpeed); // schedule next update
+    setTimeout(type, typeSpeed);
 }
 
-// update the character index based on whether deleting or typing
+// update character index based on mode
 function updateCharIndex() {
-    if (isDeleting) {
-        charIndex--;
-    } else {
-        charIndex++;
-    }
+    isDeleting ? charIndex-- : charIndex++;
 }
 
-// update the text content of the typewriter element
+// update the displayed text
 function updateTypedText(currentWord) {
     typedTextSpan.textContent = currentWord.substring(0, charIndex);
 }
 
-// on dom loaded, start typewriter and set up navigation
+// dom loaded: init typewriter and navigation behavior
 document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(type, 1000); // start type effect after a short delay
-
-    // show landing section by default
+    setTimeout(type, 1000);
     document.getElementById('landing').classList.add('active');
 
-    // enable smooth navigation for each anchor link
+    // smooth scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
-
-            // remove active class from all sections
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-
-            // add active class to target section
             document.getElementById(targetId).classList.add('active');
         });
     });
+    
+    // check for form redirect parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('thankyou')) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById('contact').classList.add('active');
+        const formSuccess = document.getElementById('form-success');
+        if (formSuccess) {
+            formSuccess.classList.add('visible');
+            setTimeout(() => {
+                formSuccess.classList.remove('visible');
+            }, 5000);
+        }
+    }
 });
 
-// fetch latest github repository and update the link in the page
+// fetch latest github repo and update link
 async function fetchLatestRepo() {
     try {
         const response = await fetch('https://api.github.com/users/derek-m-martin/repos?sort=updated&per_page=1');
@@ -83,10 +83,9 @@ async function fetchLatestRepo() {
         document.getElementById('latest-repo').textContent = 'error loading repository';
     }
 }
-
 fetchLatestRepo();
 
-// project data for portfolio display
+// project data for portfolio
 const projects = [
     {
         name: "Portfolio Website",
@@ -98,253 +97,201 @@ const projects = [
         readme: "Demo readme content...",
         code: "// Demo code content...",
         screenshots: [],
-        filePositions: {}
+        filePositions: {},
+        githubUrl: "https://github.com/derek-m-martin/PortfolioSite",
+        liveUrl: "#"
     },
     {
         name: "Finance Tracker",
-        language: "java",
         description: "Personal finance tracking application for a school project",
         techStack: ["Java"],
         lastUpdated: "2024-11-29",
         position: { x: 0, y: 0 },
-        readme: "Demo readme content...",
-        code: "// Demo code content...",
-        screenshots: [],
-        filePositions: {}
+        githubUrl: "https://github.com/derek-m-martin/Simple-Java-Finance-Tracker",
+        liveUrl: null
     },
     {
         name: "EvoEstimator",
-        language: "swift",
         description: "iOS app for providing real-time cost estimates for vancouver's evo car-share service",
         techStack: ["Swift", "SwiftUI", "Google API's"],
         lastUpdated: "2025-02-05",
         position: { x: 0, y: 0 },
-        readme: "Demo readme content...",
-        code: "// Demo code content...",
-        screenshots: [],
-        filePositions: {}
+        githubUrl: "https://github.com/derek-m-martin/EvoEstimatorApp",
+        liveUrl: "https://apps.apple.com/ca/app/evoestimator/id6740095673"
     }
 ];
-
 let projectsInitialized = false;
 
-// get a random position for folders with a spacing constraint
-function getRandomPosition(folderWidth, folderHeight, existingPositions = []) {
-    const navHeight = 100;
-    const padding = 20;
-    const minDistance = 200; // minimum distance between folders
-
-    // calculate boundaries based on window size and padding
-    const maxX = window.innerWidth - folderWidth - padding;
-    const minX = padding;
-    const maxY = window.innerHeight - folderHeight - padding;
-    const minY = navHeight;
-
-    let attempts = 0;
-    const maxAttempts = 50; // avoid infinite loops
-
-    // find a position that is far enough from existing ones
-    while (attempts < maxAttempts) {
-        const position = {
-            x: Math.floor(Math.random() * (maxX - minX) + minX),
-            y: Math.floor(Math.random() * (maxY - minY) + minY)
-        };
-
-        const isFarEnough = existingPositions.every(existing => {
-            const distance = Math.sqrt(
-                Math.pow(position.x - existing.x, 2) +
-                Math.pow(position.y - existing.y, 2)
-            );
-            return distance >= minDistance;
-        });
-
-        if (isFarEnough || existingPositions.length === 0) {
-            return position;
-        }
-
-        attempts++;
-    }
-
-    // fallback to a random position if none found
-    return {
-        x: Math.floor(Math.random() * (maxX - minX) + minX),
-        y: Math.floor(Math.random() * (maxY - minY) + minY)
-    };
-}
-
-// initialize project folders on the desktop
+// initialize project cards for portfolio
 function initializeProjects() {
     if (projectsInitialized) return;
-
-    const foldersContainer = document.querySelector('.folders-container');
-    foldersContainer.innerHTML = '';
-
-    // create folder element for each project
-    const folderElements = projects.map(project => {
-        const folder = document.createElement('div');
-        folder.className = 'project-folder';
-        folder.innerHTML = `
-      <img src="assets/mac_folder.png" alt="folder">
-      <div class="folder-name">${project.name}</div>
-    `;
-        makeDraggable(folder, project); // enable drag functionality
-        folder.addEventListener('mouseenter', () => updateProjectInfo(project)); // update info on hover
-        folder.addEventListener('dblclick', () => openFinder(project)); // open finder on double click
-        return folder;
+    const projectsContainer = document.querySelector('.projects-container');
+    projectsContainer.innerHTML = '';
+    const projectElements = projects.map(project => {
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.innerHTML = `
+            <div class="project-card-header">
+                <h3 class="project-title">${project.name}</h3>
+                <div class="project-actions">
+                    ${project.githubUrl ? `
+                        <a href="${project.githubUrl}" target="_blank" class="project-action" aria-label="GitHub Repo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.016-2.04-3.338.73-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.73.084-.73 1.205.084 1.84 1.236 1.84 1.236 1.07 1.835 2.807 1.304 3.492.997.107-.775.417-1.305.76-1.605-2.665-.305-5.467-1.332-5.467-5.93 0-1.31.469-2.38 1.236-3.22-.124-.304-.536-1.527.117-3.176 0 0 1.008-.322 3.301 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.293-1.552 3.3-1.23 3.3-1.23.653 1.649.241 2.872.118 3.176.77.84 1.236 1.91 1.236 3.22 0 4.61-2.807 5.624-5.48 5.92.43.372.81 1.102.81 2.222 0 1.606-.015 2.898-.015 3.293 0 .318.216.69.825.574C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    ` : ''}
+                    ${project.liveUrl ? `
+                        <a href="${project.liveUrl}" target="_blank" class="project-action" aria-label="Live Demo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon">
+                                <path d="M14 3H21V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 21H3V3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+            <p class="project-description">${project.description}</p>
+            <div class="tech-stack">
+                ${project.techStack.map(tech => `<span class="tech-pill">${tech}</span>`).join('')}
+            </div>
+        `;
+        return card;
     });
+    projectsContainer.append(...projectElements);
 
-    foldersContainer.append(...folderElements);
-
-    // update info panel with first project info
-    if (projects.length > 0) {
-        updateProjectInfo(projects[0]);
+    // special behavior for portfolio site card
+    const portfolioCard = projectElements[0];
+    if (portfolioCard) {
+        const liveLink = portfolioCard.querySelector('.project-action[aria-label="Live Demo"]');
+        if (liveLink) {
+            liveLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPortfolioPopup();
+            });
+        }
     }
-
+    // force repaint
+    projectsContainer.style.display = 'none';
+    setTimeout(() => {
+        projectsContainer.style.display = 'flex';
+    }, 10);
     projectsInitialized = true;
-
-    // set up close controls for finder windows
-    document.querySelectorAll('.control.close').forEach(control => {
-        control.addEventListener('click', (e) => {
-            const finderWindow = e.target.closest('.finder-window');
-            if (finderWindow) {
-                finderWindow.classList.remove('active');
-            }
-        });
-    });
 }
 
-// update the project info panel with project details
-function updateProjectInfo(project) {
-    const projectInfo = document.querySelector('.project-info');
-    projectInfo.innerHTML = `
-    <h2 class="project-info-title">${project.name}</h2>
-    <p class="project-description">${project.description}</p>
-    <div class="tech-stack">
-      ${project.techStack.map(tech => `<span class="tech-badge">${tech}</span>`).join('')}
-    </div>
-    <p class="last-updated">Last updated: ${project.lastUpdated}</p>
-  `;
+// show portfolio popup message
+function showPortfolioPopup() {
+    let popup = document.getElementById('portfolio-popup');
+    if (!popup) {
+        popup = document.createElement('div');
+        popup.id = 'portfolio-popup';
+        popup.className = 'portfolio-popup';
+        popup.innerHTML = `
+            <div class="popup-content">
+                <p>You're already on my portfolio site!</p>
+                <button class="popup-close">Close</button>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        popup.querySelector('.popup-close').addEventListener('click', function() {
+            popup.classList.remove('visible');
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 300);
+        });
+    }
+    popup.style.display = 'flex';
+    setTimeout(() => {
+        popup.classList.add('visible');
+    }, 10);
 }
 
 // fetch and display recent github activity
 async function fetchGitHubActivity() {
     const activityContainer = document.querySelector('.github-activity');
-
-    // show loading state
+    // show loading message
     activityContainer.innerHTML = `
-    <h2 class="activity-title">Recent Activity</h2>
-    <div class="activity-item visible">loading activity...</div>
-  `;
-
+        <h2 class="activity-title">Recent GitHub Activity</h2>
+        <div class="activity-item visible">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.1); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <span>loading activity...</span>
+            </div>
+        </div>
+    `;
     try {
-        const response = await fetch('https://api.github.com/users/derek-m-martin/events?per_page=30');
+        const response = await fetch('https://api.github.com/users/derek-m-martin/events/public');
+        if (!response.ok) throw new Error('Failed to fetch GitHub activity');
         const events = await response.json();
-
-        // map each event to an html element
+        // create html for each activity event
         const activityItems = events
+            .slice(0, 10)
             .map(event => {
                 let actionText = '';
                 let detailText = '';
                 const repoName = event.repo.name.split('/')[1];
                 const date = new Date(event.created_at);
-                const formattedDate = date.toLocaleDateString('en-us', {
-                    month: 'numeric',
-                    day: 'numeric',
-                    year: 'numeric'
-                });
-
+                const formattedDate = date.toLocaleDateString('en-us', { month: 'numeric', day: 'numeric', year: 'numeric' });
                 switch (event.type) {
                     case 'PushEvent':
-                        const commit = event.payload.commits[0];
                         actionText = `Pushed a commit to`;
-                        detailText = commit.message;
+                        detailText = event.payload.commits[0].message;
                         break;
                     case 'CreateEvent':
-                        actionText = `Created a ${event.payload.ref_type}`;
-                        if (event.payload.ref) {
-                            detailText = `Named: ${event.payload.ref}`;
-                        }
+                        actionText = `Created a ${event.payload.ref_type} in`;
+                        if (event.payload.ref) detailText = event.payload.ref;
                         break;
                     case 'DeleteEvent':
-                        actionText = `Deleted a ${event.payload.ref_type}`;
-                        if (event.payload.ref) {
-                            detailText = `Named: ${event.payload.ref}`;
-                        }
+                        actionText = `Deleted a ${event.payload.ref_type} in`;
+                        if (event.payload.ref) detailText = event.payload.ref;
                         break;
                     case 'PullRequestEvent':
-                        actionText = `${event.payload.action} A Pull Request in`;
+                        actionText = `${event.payload.action} a pull request in`;
                         detailText = event.payload.pull_request.title;
                         break;
                     case 'IssuesEvent':
-                        actionText = `${event.payload.action} An Issue in`;
+                        actionText = `${event.payload.action} an issue in`;
                         detailText = event.payload.issue.title;
                         break;
-                    case 'ForkEvent':
-                        actionText = `Forked`;
-                        detailText = `To ${event.payload.forkee.full_name}`;
-                        break;
                     case 'WatchEvent':
-                        actionText = `Starred`;
-                        break;
-                    case 'PublicEvent':
-                        actionText = `Made Public`;
+                        actionText = `starred`;
                         break;
                     default:
                         return null;
                 }
-
                 return `
-          <div class="activity-item">
-            <div>${actionText} <a href="https://github.com/${event.repo.name}" target="_blank">${repoName}</a></div>
-            ${detailText ? `<div class="activity-message">${detailText}</div>` : ''}
-            <div class="activity-time">${formattedDate}</div>
-          </div>
-        `;
+                    <div class="activity-item">
+                        <div>${actionText} <a href="https://github.com/${event.repo.name}" target="_blank">${repoName}</a></div>
+                        ${detailText ? `<div class="activity-message">${detailText}</div>` : ''}
+                        <div class="activity-time">${formattedDate}</div>
+                    </div>
+                `;
             })
             .filter(item => item !== null)
             .join('');
-
-        // update activity container with fetched items
         activityContainer.innerHTML = `
-      <h2 class="activity-title">Recent Activity</h2>
-      ${activityItems}
-    `;
-
-        // use intersection observer to fade in items
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, {
-            root: activityContainer,
-            threshold: 0.1,
-            rootMargin: '10px'
-        });
-
-        // observe each activity item
+            <h2 class="activity-title">Recent GitHub Activity</h2>
+            ${activityItems || '<div class="activity-item visible">No recent activity</div>'}
+        `;
         document.querySelectorAll('.activity-item').forEach(item => {
-            observer.observe(item);
+            item.classList.add('visible');
         });
-
     } catch (error) {
         console.error('error fetching github activity:', error);
         activityContainer.innerHTML = `
-      <h2 class="activity-title">Recent Activity</h2>
-      <div class="activity-item visible">error loading github activity</div>
-    `;
+            <h2 class="activity-title">Recent GitHub Activity</h2>
+            <div class="activity-item visible">
+                <div style="color: #e74c3c;">Failed to load github activity. Please try again later.</div>
+            </div>
+        `;
     }
 }
 
-// set up periodic updates for github activity
+// setup periodic github activity update
 function initializeGitHubActivity() {
-    fetchGitHubActivity(); // fetch immediately
-
-    // update every 2 minutes
-    const updateInterval = setInterval(fetchGitHubActivity, 2 * 60 * 1000);
-
-    // clear update interval when projects section is not active
+    fetchGitHubActivity();
+    const updateInterval = setInterval(fetchGitHubActivity, 120000);
     const projectsSection = document.getElementById('projects');
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
@@ -353,228 +300,79 @@ function initializeGitHubActivity() {
             }
         });
     });
+    observer.observe(projectsSection, { attributes: true, attributeFilter: ['class'] });
+}
 
-    observer.observe(projectsSection, {
-        attributes: true,
-        attributeFilter: ['class']
+// create a timeline item element
+function createTimelineItem(item, index) {
+    const timelineItem = document.createElement('div');
+    timelineItem.className = 'timeline-item';
+    if (index === 0) timelineItem.classList.add('active');
+    timelineItem.innerHTML = `
+    <div class="timeline-icon ${item.type}"></div>
+    <div class="timeline-content">
+      <div class="timeline-date">${item.date}</div>
+      <h3>${item.title}</h3>
+      <h4>${item.organization}</h4>
+      ${item.description ? `<p>${item.description}</p>` : ''}
+    </div>
+  `;
+    return timelineItem;
+}
+
+// initialize timeline with navigation buttons
+function initializeTimeline() {
+    const timelineWrapper = document.querySelector('.timeline-items-wrapper');
+    const timelineContainer = document.querySelector('.timeline-items-container');
+    const prevButton = document.querySelector('.timeline-nav-button.prev');
+    const nextButton = document.querySelector('.timeline-nav-button.next');
+    let currentIndex = 0;
+    timelineWrapper.innerHTML = '';
+    timelineItems.forEach((item, index) => {
+        timelineWrapper.appendChild(createTimelineItem(item, index));
     });
+    const items = document.querySelectorAll('.timeline-item');
+    function updateTimelineState() {
+        const containerHeight = timelineContainer.offsetHeight;
+        const itemHeight = items[0].offsetHeight;
+        const centerOffset = (containerHeight - itemHeight) / 2;
+        const translation = -(currentIndex * itemHeight) + centerOffset;
+        items.forEach((item, index) => {
+            item.classList.toggle('active', index === currentIndex);
+        });
+        timelineWrapper.style.transform = `translateY(${translation}px)`;
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === items.length - 1;
+    }
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateTimelineState();
+        }
+    });
+    nextButton.addEventListener('click', () => {
+        if (currentIndex < items.length - 1) {
+            currentIndex++;
+            updateTimelineState();
+        }
+    });
+    updateTimelineState();
 }
 
-// add drag functionality to folders and files
-function makeDraggable(element, project, fileType) {
-    let isDragging = false;
-    let startX;
-    let startY;
-    let initialLeft;
-    let initialTop;
-
-    element.addEventListener('mousedown', onMouseDown);
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-
-    // start dragging process
-    function onMouseDown(e) {
-        if (e.target.classList.contains('control')) return;
-
-        isDragging = true;
-        const rect = element.getBoundingClientRect();
-        initialLeft = rect.left;
-        initialTop = rect.top;
-        startX = e.clientX - initialLeft;
-        startY = e.clientY - initialTop;
-        element.style.cursor = 'grabbing';
-
-        // adjust for files in finder window
-        if (fileType) {
-            const finderFiles = element.closest('.finder-files');
-            if (finderFiles) {
-                const finderRect = finderFiles.getBoundingClientRect();
-                initialLeft = rect.left - finderRect.left;
-                initialTop = rect.top - finderRect.top;
-                startX = e.clientX - rect.left;
-                startY = e.clientY - rect.top;
-            }
-        }
-
-        e.preventDefault();
-    }
-
-    // update element position while dragging
-    function onMouseMove(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-
-        if (fileType) {
-            const finderFiles = element.closest('.finder-files');
-            if (finderFiles) {
-                const finderRect = finderFiles.getBoundingClientRect();
-                const x = e.clientX - finderRect.left - startX;
-                const y = e.clientY - finderRect.top - startY;
-                element.style.position = 'absolute';
-                element.style.left = `${x}px`;
-                element.style.top = `${y}px`;
-                if (project.filePositions) {
-                    project.filePositions[fileType] = { x, y };
-                }
-            }
-        } else {
-            const x = e.clientX - startX;
-            const y = e.clientY - startY;
-            element.style.position = 'absolute';
-            element.style.left = `${x}px`;
-            element.style.top = `${y}px`;
-            project.position = { x, y };
-        }
-    }
-
-    // end dragging process
-    function onMouseUp() {
-        isDragging = false;
-        element.style.cursor = fileType ? 'move' : 'grab';
-    }
-}
-
-// observe activation of projects section to initialize projects and github activity
+// init timeline when about section becomes active
 document.addEventListener('DOMContentLoaded', () => {
-    const projectsSection = document.getElementById('projects');
+    const aboutSection = document.getElementById('about');
     const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
             if (mutation.target.classList.contains('active')) {
-                initializeProjects();
-                initializeGitHubActivity(); // set up new interval each time
+                initializeTimeline();
             }
         });
     });
-
-    observer.observe(projectsSection, {
-        attributes: true,
-        attributeFilter: ['class']
-    });
+    observer.observe(aboutSection, { attributes: true, attributeFilter: ['class'] });
 });
 
-// open finder window for the selected project
-function openFinder(project) {
-    // hide desktop folders
-    const foldersContainer = document.querySelector('.folders-container');
-    foldersContainer.style.opacity = '0';
-    foldersContainer.style.pointerEvents = 'none';
-
-    // remove any existing finder windows except the template
-    document.querySelectorAll('.finder-window:not(#finder-template)').forEach(window => window.remove());
-
-    const finderTemplate = document.getElementById('finder-template');
-    const finder = finderTemplate.cloneNode(true);
-    finder.id = `finder-${project.name.toLowerCase().replace(/\s+/g, '-')}`;
-    finder.classList.add('active');
-
-    // set finder window title to project name
-    finder.querySelector('.project-name').textContent = project.name;
-    // close finder and show folders when close button is clicked
-    finder.querySelector('.close').onclick = () => {
-        finder.remove();
-        foldersContainer.style.opacity = '1';
-        foldersContainer.style.pointerEvents = 'all';
-    };
-    // minimize finder window when minimize button is clicked
-    finder.querySelector('.minimize').onclick = () => finder.classList.remove('active');
-
-    // setup files in finder window
-    const finderFiles = finder.querySelector('.finder-files');
-    finderFiles.innerHTML = ''; // clear previous files
-
-    // create file elements for each file type
-    const fileTypes = ['readme', 'code', 'demo', 'preview'];
-    fileTypes.forEach(fileType => {
-        const file = document.createElement('div');
-        file.className = 'file';
-        file.dataset.type = fileType;
-
-        let iconSrc, fileName;
-        switch (fileType) {
-            case 'readme':
-                iconSrc = 'assets/paper.png';
-                fileName = 'readme.txt';
-                break;
-            case 'code':
-                iconSrc = 'assets/code_icon.png';
-                fileName = `code_snippet.${project.language || 'txt'}`;
-                break;
-            case 'demo':
-                iconSrc = 'assets/project_icon.png';
-                fileName = 'demo.proj';
-                break;
-            case 'preview':
-                iconSrc = 'assets/photo_icon.png';
-                fileName = 'screenshot.jpg';
-                break;
-        }
-
-        file.innerHTML = `
-      <img src="${iconSrc}" alt="${fileType} file" class="file-icon">
-      <div class="file-name">${fileName}</div>
-    `;
-
-        makeDraggable(file, project, fileType); // enable drag for file
-
-        // placeholder action for double click on file
-        file.addEventListener('dblclick', () => {
-            alert(`opening ${fileType} file... (to be implemented)`);
-        });
-
-        finderFiles.appendChild(file);
-    });
-
-    document.querySelector('.finder-desktop').appendChild(finder);
-
-    // enable dragging for finder window via its header
-    let isDragging = false;
-    let startX;
-    let startY;
-    let initialLeft;
-    let initialTop;
-
-    finder.querySelector('.finder-header').addEventListener('mousedown', (e) => {
-        if (e.target.classList.contains('control')) return;
-        isDragging = true;
-        const rect = finder.getBoundingClientRect();
-        initialLeft = rect.left;
-        initialTop = rect.top;
-        startX = e.clientX - initialLeft;
-        startY = e.clientY - initialTop;
-        finder.style.cursor = 'move';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const left = e.clientX - startX;
-        const top = e.clientY - startY;
-        finder.style.left = `${left}px`;
-        finder.style.top = `${top}px`;
-        finder.style.transform = 'none';
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        finder.style.cursor = 'default';
-    });
-}
-
-// helper function to get file icon based on extension
-function getFileIcon(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    const iconMap = {
-        html: 'code_icon.png',
-        css: 'code_icon.png',
-        js: 'js.png',
-        java: 'code_icon.png',
-        swift: 'code_icon.png',
-        md: 'paper.png'
-    };
-    return iconMap[ext] || 'code_icon.png';
-}
-
-// timeline data for display
+// timeline data
 const timelineItems = [
     {
         type: "project",
@@ -582,7 +380,7 @@ const timelineItems = [
         date: "August 2024 - Present",
         title: "EvoEstimator iOS App",
         organization: "Personal Project",
-        description: "Self-learned Swift, SwiftUI, and Google API's to create an iOS app to provide real-time cost estimates for trips using evo, vancouver's car-sharing service."
+        description: "Self-learned swift, swiftui, and google api's to create an ios app to provide real-time cost estimates for trips using evo, vancouver's car-sharing service."
     },
     {
         type: "work",
@@ -610,96 +408,6 @@ const timelineItems = [
     }
 ];
 
-// create a timeline item element from timeline data
-function createTimelineItem(item, index) {
-    const timelineItem = document.createElement('div');
-    timelineItem.className = 'timeline-item';
-    if (index === 0) timelineItem.classList.add('active');
-
-    timelineItem.innerHTML = `
-    <div class="timeline-icon ${item.type}"></div>
-    <div class="timeline-content">
-      <div class="timeline-date">${item.date}</div>
-      <h3>${item.title}</h3>
-      <h4>${item.organization}</h4>
-      ${item.description ? `<p>${item.description}</p>` : ''}
-    </div>
-  `;
-
-    return timelineItem;
-}
-
-// initialize timeline section with navigation buttons
-function initializeTimeline() {
-    const timelineWrapper = document.querySelector('.timeline-items-wrapper');
-    const timelineContainer = document.querySelector('.timeline-items-container');
-    const prevButton = document.querySelector('.timeline-nav-button.prev');
-    const nextButton = document.querySelector('.timeline-nav-button.next');
-    let currentIndex = 0;
-
-    // clear previous timeline items
-    timelineWrapper.innerHTML = '';
-
-    // add timeline items to wrapper
-    timelineItems.forEach((item, index) => {
-        timelineWrapper.appendChild(createTimelineItem(item, index));
-    });
-
-    const items = document.querySelectorAll('.timeline-item');
-
-    // update timeline position and active state based on index
-    function updateTimelineState() {
-        const containerHeight = timelineContainer.offsetHeight;
-        const itemHeight = items[0].offsetHeight;
-        const centerOffset = (containerHeight - itemHeight) / 2;
-        const translation = -(currentIndex * itemHeight) + centerOffset;
-
-        items.forEach((item, index) => {
-            item.classList.toggle('active', index === currentIndex);
-        });
-
-        timelineWrapper.style.transform = `translateY(${translation}px)`;
-        prevButton.disabled = currentIndex === 0;
-        nextButton.disabled = currentIndex === items.length - 1;
-    }
-
-    // navigate to previous timeline item
-    prevButton.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateTimelineState();
-        }
-    });
-
-    // navigate to next timeline item
-    nextButton.addEventListener('click', () => {
-        if (currentIndex < items.length - 1) {
-            currentIndex++;
-            updateTimelineState();
-        }
-    });
-
-    // set initial timeline state
-    updateTimelineState();
-}
-
-// initialize timeline when the about section becomes active
-document.addEventListener('DOMContentLoaded', () => {
-    const aboutSection = document.getElementById('about');
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.target.classList.contains('active')) {
-                initializeTimeline();
-            }
-        });
-    });
-
-    observer.observe(aboutSection, {
-        attributes: true,
-        attributeFilter: ['class']
-    });
-});
-
 // skills data for portfolio
 const skills = [
     { name: "Java", level: "Experienced", percentage: 75 },
@@ -711,15 +419,13 @@ const skills = [
     { name: "JavaScript", level: "Learning", percentage: 25 },
     { name: "Git/GitHub Version Control", level: "Experienced", percentage: 75 }
 ];
-
 const skillLevels = ["No Experience", "Learning", "Proficient", "Experienced", "Expert"];
 
-// create a skill bar element for a given skill
+// create a skill bar element for each skill
 function createSkillBar(skill) {
     const skillItem = document.createElement('div');
     skillItem.className = 'skill-item';
     skillItem.setAttribute('data-level', skill.level);
-
     skillItem.innerHTML = `
     <div class="skill-info">
       <span>${skill.name}</span>
@@ -731,25 +437,20 @@ function createSkillBar(skill) {
       <div class="skill-fill" style="width: ${skill.percentage}%"></div>
     </div>
   `;
-
     return skillItem;
 }
 
-// initialize the skills section by adding all skill bars
+// initialize skills section
 function initializeSkills() {
     const skillBarsContainer = document.querySelector('.skill-bars');
     if (!skillBarsContainer) return;
-
-    // clear previous skill bars
     skillBarsContainer.innerHTML = '';
-
-    // add each skill as a skill bar
     skills.forEach(skill => {
         skillBarsContainer.appendChild(createSkillBar(skill));
     });
 }
 
-// initialize skills when the about section becomes active
+// init skills when about section becomes active
 document.addEventListener('DOMContentLoaded', () => {
     const aboutSection = document.getElementById('about');
     const observer = new MutationObserver((mutations) => {
@@ -759,9 +460,98 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+    observer.observe(aboutSection, { attributes: true, attributeFilter: ['class'] });
 
-    observer.observe(aboutSection, {
-        attributes: true,
-        attributeFilter: ['class']
+    // initializes projects section when it becomes active
+    const projectsSection = document.getElementById('projects');
+    const projectsObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.target.classList.contains('active')) {
+                initializeProjects();
+                initializeGitHubActivity();
+            }
+        });
     });
+    projectsObserver.observe(projectsSection, { attributes: true, attributeFilter: ['class'] });
 });
+
+// handle contact form submission and initialization
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleFormSubmit);
+    }
+    const contactSection = document.getElementById('contact');
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.target.classList.contains('active')) {
+                console.log('contact section is now active');
+                const formSuccess = document.getElementById('form-success');
+                const formError = document.getElementById('form-error');
+                if (formSuccess) formSuccess.classList.remove('visible');
+                if (formError) formError.classList.remove('visible');
+            }
+        });
+    });
+    if (contactSection) {
+        observer.observe(contactSection, { attributes: true, attributeFilter: ['class'] });
+    }
+});
+
+// process contact form submission
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    console.log('form submission started');
+    const form = event.target;
+    const formSuccess = document.getElementById('form-success');
+    const formError = document.getElementById('form-error');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const submitButton = form.querySelector('.submit-button');
+    const buttonText = submitButton.querySelector('.button-text');
+    loadingSpinner.style.display = 'block';
+    buttonText.textContent = 'sending...';
+    submitButton.disabled = true;
+    const formData = new FormData(form);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+    const formSubmitURL = 'https://formsubmit.co/ajax/derekmartin1005@gmail.com';
+    try {
+        console.log('sending form data');
+        const response = await fetch(formSubmitURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                message: message,
+                _subject: 'portfolio contact: new message',
+                _template: 'table'
+            })
+        });
+        const result = await response.json();
+        console.log('form submission result:', result);
+        if (result.success === 'true' || result.success === true) {
+            form.reset();
+            formSuccess.classList.add('visible');
+            setTimeout(() => {
+                formSuccess.classList.remove('visible');
+            }, 5000);
+        } else {
+            throw new Error('form submission failed');
+        }
+    } catch (error) {
+        console.error('error submitting form:', error);
+        formError.classList.add('visible');
+        setTimeout(() => {
+            formError.classList.remove('visible');
+        }, 5000);
+    } finally {
+        loadingSpinner.style.display = 'none';
+        buttonText.textContent = 'send message';
+        submitButton.disabled = false;
+    }
+}

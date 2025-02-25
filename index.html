@@ -77,7 +77,7 @@
                 <div class="timeline">
                     <div class="timeline-items-container">
                         <div class="timeline-items-wrapper">
-                            <!-- Timeline items will be dynamically inserted here -->
+                            <!-- timeline items put here by script.js -->
                         </div>
                     </div>
                     <div class="timeline-navigation">
@@ -90,90 +90,77 @@
     </section>
 
     <section id="projects" class="section projects-section">
-        <div class="finder-desktop">
-
-            <div class="folders-container">
+        <div class="projects-page-container">
+            <div class="projects-container">
+                <!-- project cards put here by script.js -->
             </div>
 
             <div class="right-section">
                 <div class="github-activity">
-                    <h2 class="activity-title">Recent Activity</h2>
-                </div>
-
-                <div class="project-info">
-                    <h2 class="project-info-title">Portfolio Website</h2>
-                    <p class="project-description">My personal portfolio website to showcase my projects and skills</p>
-                    <div class="tech-stack">
-                        <span class="tech-badge">HTML</span>
-                        <span class="tech-badge">CSS</span>
-                        <span class="tech-badge">JavaScript</span>
-                    </div>
-                    <p class="last-updated">Last updated: 2024-02-14</p>
-                </div>
-            </div>
-
-            <div id="finder-template" class="finder-window">
-                <div class="finder-header">
-                    <div class="finder-controls">
-                        <span class="control close"></span>
-                        <span class="control minimize"></span>
-                        <span class="control expand"></span>
-                    </div>
-                    <div class="finder-title">
-                        <img src="assets/mac_folder.png" alt="Folder" class="finder-icon">
-                        <span class="default-name">Users -> </span>
-                        <span class="user-name">DerekMartin -> </span>
-                        <span class="project-name">Project Name</span>
-                    </div>
-                </div>
-
-                <div class="finder-content">
-                    <div class="finder-sidebar">
-                        <div class="sidebar-section">Favorites</div>
-                        <div class="sidebar-button">Dropbox</div>
-                        <div class="sidebar-button">Applications</div>
-                        <div class="sidebar-button">Internships</div>
-                        <div class="sidebar-section">iCloud</div>
-                        <div class="sidebar-button">DerekMartin</div>
-                        <div class="sidebar-button">iCloud Drive</div>
-                        <div class="sidebar-button">Documents</div>
-                        <div class="sidebar-section">Locations</div>
-                        <div class="sidebar-button">Vancouver</div>
-                        <div class="sidebar-button">Kitchener</div>
-                    </div>
-
-                    <div class="finder-files">
-                        <div class="file" data-type="readme">
-                            <img src="assets/paper.png" alt="Text File" class="file-icon">
-                            <div class="file-name">readme.txt</div>
-                        </div>
-
-                        <div class="file" data-type="code">
-                            <img src="assets/code_icon.png" alt="Code File" class="file-icon">
-                            <div class="file-name">code_snippet.txt</div>
-                        </div>
-
-                        <div class="file" data-type="demo">
-                            <img src="assets/project_icon.png" alt="Demo File" class="file-icon">
-                            <div class="file-name">demo.proj</div>
-                        </div>
-
-                        <div class="file" data-type="preview">
-                            <img src="assets/photo_icon.png" alt="Screenshot File" class="file-icon">
-                            <div class="file-name">screenshot.jpg</div>
-                        </div>
-
-                        <div class="screenshots-container"></div>
-                    </div>
-                    <div class="finder-preview"></div>
+                    <h2 class="activity-title">Recent GitHub Activity</h2>
+                    <!-- activity items put here by script.js -->
                 </div>
             </div>
         </div>
     </section>
 
     <section id="contact" class="section contact-section">
-        <h2>Contact</h2>
-        <p>placeholder for eventual contact form</p>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h2>Contact</h2>
+                <p class="contact-description">Have a question, employment opportunity, or just want to say hi? Feel free to reach out! The best way to reach me is through the contact form on the right!</p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="detail-icon">
+                                <rect x="2" y="4" width="20" height="16" rx="2" />
+                                <path d="M22 7l-10 5-10-5" />
+                            </svg>
+                        </div>
+                        <a href="mailto:derekmartin1005@gmail.com" class="contact-link">derekmartin1005@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="detail-icon">
+                                <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z" />
+                                <circle cx="12" cy="10" r="3" />
+                            </svg>
+                        </div>
+                        <span class="contact-text">Vancouver, BC</span>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form-container">
+                <form id="contact-form" class="contact-form" action="https://formsubmit.co/derekmartin1005@gmail.com" method="POST">
+                    <input type="hidden" name="_subject" value="Portfolio Contact: New Message">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://derekmmartin.com?thankyou=true">
+                    <div class="form-success" id="form-success">
+                        <p>Thank you for your message! I'll get back to you soon.</p>
+                    </div>
+                    <div class="form-error" id="form-error">
+                        <p>Sorry, there was an error sending your message. Please try again.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        <span class="button-text">Send Message</span>
+                        <span class="loading-spinner" id="loading-spinner"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
     </section>
 
     <footer>
