@@ -376,24 +376,48 @@ document.addEventListener('DOMContentLoaded', () => {
 const timelineItems = [
     {
         type: "project",
-        icon: "code_icon.png",
-        date: "August 2024 - Present",
-        title: "EvoEstimator iOS App",
+        icon: "project_icon.png",
+        date: "March 2025 - Ongoing",
+        title: "Portfolio Website",
         organization: "Personal Project",
-        description: "Self-learned swift, swiftui, and google api's to create an ios app to provide real-time cost estimates for trips using evo, vancouver's car-sharing service."
-    },
-    {
-        type: "work",
-        icon: "work_icon.png",
-        date: "April 2024 - Present",
-        title: "Truck Team Member",
-        organization: "1800-GOT-JUNK?",
-        description: "Performed physical labor to help remove junk from customer's homes."
+        description: "Decided to pick up some HTML, CSS, and JS to create this very portfolio website so I can showcase my projects and skills to you!"
     },
     {
         type: "education",
         icon: "grad_cap.png",
-        date: "September 2023 - Present",
+        date: "September 2025 - Ongoing",
+        title: "B.Sc. in Computer Science",
+        organization: "Wilfrid Laurier University",
+        description: "Transferred from UBC to Laurier"
+    },
+    {
+        type: "work",
+        icon: "work_icon.png",
+        date: "September 2025 - Ongoing",
+        title: "Food Service Worker",
+        organization: "Costco Wholesale Canada",
+        description: null
+    },
+    {
+        type: "project",
+        icon: "project_icon.png",
+        date: "August 2024 - April 2025",
+        title: "EvoEstimator iOS App",
+        organization: "Personal Project",
+        description: "Self-learned Swift, SwiftUI, and a few google api's to create an iOS app to provide real-time cost estimates and trip planning for Evo, Vancouver's car-sharing service."
+    },
+    {
+        type: "work",
+        icon: "work_icon.png",
+        date: "April 2024 - July 2025",
+        title: "Truck Team Member",
+        organization: "1800-GOT-JUNK?",
+        description: null
+    },
+    {
+        type: "education",
+        icon: "grad_cap.png",
+        date: "September 2023 - April 2025",
         title: "B.A. in Computer Science",
         organization: "University of British Columbia",
         description: null
@@ -404,7 +428,7 @@ const timelineItems = [
         date: "January 2023 - August 2023",
         title: "Line Cook",
         organization: "City of Waterloo",
-        description: "Prepared catering events, cooked food for the public, and maintained a rigorously clean kitchen environment."
+        description: null
     }
 ];
 
@@ -414,8 +438,8 @@ const skills = [
     { name: "Python", level: "Experienced", percentage: 75 },
     { name: "Swift", level: "Proficient", percentage: 50 },
     { name: "Google API's", level: "Proficient", percentage: 50 },
-    { name: "C#", level: "Proficient", percentage: 50 },
-    { name: "HTML/CSS", level: "Learning", percentage: 25 },
+    { name: "C#", level: "Experienced", percentage: 75 },
+    { name: "HTML/CSS", level: "Proficient", percentage: 50 },
     { name: "JavaScript", level: "Learning", percentage: 25 },
     { name: "Git/GitHub Version Control", level: "Experienced", percentage: 75 }
 ];
