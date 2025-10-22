@@ -221,13 +221,22 @@ async function fetchGitHubActivity() {
         </div>
     `;
     try {
-        const response = await fetch('https://api.github.com/users/derek-m-martin/events/public');
-        if (!response.ok) throw new Error('Failed to fetch GitHub activity');
+        const response = await fetch('https://api.github.com/users/derek-m-martin/events/public', {
+            headers: {
+                'Authorization': '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',
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('GitHub API Error:', errorText);
+            throw new Error('Failed to fetch GitHub activity');
+        }
         const events = await response.json();
         // create html for each activity event
-        const activityItems = events
+        const activityPromises = events
             .slice(0, 10)
-            .map(event => {
+            .map(async event => {
                 let actionText = '';
                 let detailText = '';
                 const repoName = event.repo.name.split('/')[1];
@@ -235,8 +244,25 @@ async function fetchGitHubActivity() {
                 const formattedDate = date.toLocaleDateString('en-us', { month: 'numeric', day: 'numeric', year: 'numeric' });
                 switch (event.type) {
                     case 'PushEvent':
-                        actionText = `Pushed a commit to`;
-                        detailText = event.payload.commits[0].message;
+                        actionText = `Pushed commits to`;
+                        try {
+                            // Get the commit details using the commit API
+                            const commitResponse = await fetch(`https://api.github.com/repos/${event.repo.name}/commits/${event.payload.head}`, {
+                                headers: {
+                                    'Authorization': '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',
+                                    'Accept': 'application/vnd.github.v3+json'
+                                }
+                            });
+                            if (commitResponse.ok) {
+                                const commitData = await commitResponse.json();
+                                detailText = commitData.commit.message;
+                            } else {
+                                detailText = `Commit ${event.payload.head.substring(0, 7)}`;
+                            }
+                        } catch (e) {
+                            console.error('Error fetching commit details:', e);
+                            detailText = `Commit ${event.payload.head.substring(0, 7)}`;
+                        }
                         break;
                     case 'CreateEvent':
                         actionText = `Created a ${event.payload.ref_type} in`;
@@ -268,8 +294,11 @@ async function fetchGitHubActivity() {
                     </div>
                 `;
             })
-            .filter(item => item !== null)
-            .join('');
+            .filter(item => item !== null);
+        
+        // Wait for all promises to resolve
+        const resolvedItems = await Promise.all(activityPromises);
+        const activityItems = resolvedItems.join('');
         activityContainer.innerHTML = `
             <h2 class="activity-title">Recent GitHub Activity</h2>
             ${activityItems || '<div class="activity-item visible">No recent activity</div>'}
@@ -278,7 +307,8 @@ async function fetchGitHubActivity() {
             item.classList.add('visible');
         });
     } catch (error) {
-        console.error('error fetching github activity:', error);
+        console.error('Error fetching GitHub activity:', error);
+        console.log('API Response:', events);
         activityContainer.innerHTML = `
             <h2 class="activity-title">Recent GitHub Activity</h2>
             <div class="activity-item visible">
