@@ -222,10 +222,6 @@ async function fetchGitHubActivity() {
     `;
     try {
         const response = await fetch('https://api.github.com/users/derek-m-martin/events/public', {
-            headers: {
-                'Authorization': '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',
-                'Accept': 'application/vnd.github.v3+json'
-            }
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -247,12 +243,7 @@ async function fetchGitHubActivity() {
                         actionText = `Pushed commits to`;
                         try {
                             // Get the commit details using the commit API
-                            const commitResponse = await fetch(`https://api.github.com/repos/${event.repo.name}/commits/${event.payload.head}`, {
-                                headers: {
-                                    'Authorization': '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',
-                                    'Accept': 'application/vnd.github.v3+json'
-                                }
-                            });
+                            const commitResponse = await fetch(`https://api.github.com/repos/${event.repo.name}/commits/${event.payload.head}`);
                             if (commitResponse.ok) {
                                 const commitData = await commitResponse.json();
                                 detailText = commitData.commit.message;
